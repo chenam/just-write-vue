@@ -1,6 +1,8 @@
 <template>
     <div class="blog">
-        这是啥呀  看冻结发删掉了会计分录角度看链接啊是分开了几分阿萨德科啦
+        <ul>
+            <li v-for='(item,index) in sortData'>{{item.name}}</li>
+        </ul>
     </div>
 </template>
 
@@ -9,6 +11,11 @@ export default {
     name: 'blog',
     data () {
         return {
+            sortData:[
+                {name:'技术'},
+                {name:'随笔'},
+                {name:'读书'}
+            ]
         }
     },
     created(){
@@ -23,17 +30,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang='less'>
-
-.bg{
-    position: absolute;
-    right:100px;
-    bottom: 0; 
-    width: 180px;
-    height: 440px;
-    background: url(/static/img/bg.png) no-repeat;
-    background-size: 100% auto;
-    background-position: center bottom;
-}
 .main-wrapper{
     position: absolute;
     right: 0;
