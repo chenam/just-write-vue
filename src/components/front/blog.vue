@@ -1,23 +1,12 @@
 <template>
-    <div class="index">
-        <div class="bg"></div>
-        <div class="main-wrapper">
-            <div class="main">
-                <div class="f14">
-                    <router-link :to="{name:'index'}">首页</router-link>
-                    <router-link :to="{name:'blog'}">博客</router-link>
-                    <a href="javascript:;">关于我</a>
-                </div>
-                
-            </div>
-            
-        </div>
+    <div class="blog">
+        这是啥呀  看冻结发删掉了会计分录角度看链接啊是分开了几分阿萨德科啦
     </div>
 </template>
 
 <script>
 export default {
-    name: 'index',
+    name: 'blog',
     data () {
         return {
         }

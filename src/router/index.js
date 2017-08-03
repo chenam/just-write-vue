@@ -1,16 +1,24 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import index from '@/components/front/index'
-
+import Index from '@/components/front/index'
+import Blog from '@/components/front/blog'
 Vue.use(Router)
 
-export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'index',
-      component: index
-    },
+const router = new Router({
+    routes: [
+        {
+            path: '/',
+            name: 'index',
+            component: Index
+        },
+        {
+            path: '/blog',
+            name: 'blog',
+            component: Blog
+        },
 
-  ]
-})
+
+    ]
+});
+
+export default router;
