@@ -1,3 +1,130 @@
+body,ol,ul,h1,h2,h3,h4,h5,h6,p,th,td,dl,dd,form,fieldset,legend,input,textarea,select{margin:0;padding:0}
+body{-webkit-text-size-adjust:100%;font-size:15px;font-family: "KaiTi","MicrosoftYaHei","Arial Narrow";font-weight: bold;}
+a{color:#177cb0;;text-decoration:none}
+a:hover{color:#177cb0;;text-decoration:none;cursor:pointer;}
+em{font-style:normal}
+li{list-style:none}
+img{border:0;vertical-align:middle}
+table{border-collapse:collapse;border-spacing:0}
+p{word-wrap:break-word}
+*{box-sizing:border-box;}
+.icon{
+    width: 1em; height: 1em;
+   vertical-align: -0.15em;
+   fill: currentColor;
+   overflow: hidden;
+}
+.hide{
+    display: none;
+}
+/*字体*/
+.f12{
+    font-size: 12px;
+}
+.f13{
+    font-size: 13px;
+}
 .f14{
     font-size: 14px;
+}
+.f15{
+    font-size: 15px;
+}
+.f16{
+    font-size: 16px;
+}
+.f17{
+    font-size: 17px;
+}
+.f18{
+    font-size: 18px;
+}
+.f19{
+    font-size: 19px;
+}
+.f20{
+    font-size: 20px;
+}
+/*清浮动*/
+.clearfix:before,
+.clearfix:after{
+    content: " ";
+    display: table;
+}
+.clearfix:after,{
+    clear: both;
+}
+.clearfix {
+    *zoom: 1;
+}
+/* 去除多次点击蓝条 */
+.no-blur{
+    -webkit-user-select:none; 
+    -moz-user-select:none; 
+    -ms-user-select:none; 
+    user-select:none;
+}
+.pointer{
+    cursor: pointer;
+}
+.fn-overflow{
+    overflow: hidden;
+}
+.red{
+    color: #9d2932;
+}
+body{
+    min-width: 1200px!important;
+}
+.visibility-hide{
+    visibility: hidden;
+}
+
+
+/* 解决代码 部署服务器 样式问题 */
+/*.el-radio-group{
+    margin-top: 10px;
+}*/
+
+/* 解决element ui 样式问题 */
+button{
+    border-radius: 0!important;
+}
+
+/* 解决兼容问题 */
+    /* IE input X 去掉文本框的叉叉和密码输入框的眼睛图标  */
+::-ms-clear, ::-ms-reveal{display: none;}
+
+/*超出点点点*/
+.ellipsis{
+    overflow:hidden; /*超出的部分隐藏起来。*/ 
+    white-space:nowrap;/*不显示的地方用省略号...代替*/
+    text-overflow:ellipsis;/* 支持 IE */
+}
+/*鼠标小手状*/
+.cursor{
+    cursor: pointer;
+}
+/*单词不分开*/
+.no-word-break{
+    word-break: keep-all;
+}
+
+/*解决safari下table下...不展示*/
+.ellipsis_safari{
+    /*width需固定*/
+    /*width: 130px;*/
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    -o-text-overflow:ellipsis;
+    text-overflow:ellipsis;
+    -icab-text-overflow: ellipsis;
+    -khtml-text-overflow: ellipsis;
+    -moz-text-overflow: ellipsis;
+    -webkit-text-overflow: ellipsis;
+}
+/*==============*/
+html,body{
+    background: #f6f8fd;
 }
