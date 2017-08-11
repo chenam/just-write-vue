@@ -45,6 +45,12 @@ p{word-wrap:break-word}
 .f20{
     font-size: 20px;
 }
+.pb10{
+    padding-bottom: 10px;
+}
+.pb20{
+    padding-bottom: 20px;
+}
 /*清浮动*/
 .clearfix:before,
 .clearfix:after{
@@ -86,10 +92,6 @@ body{
     margin-top: 10px;
 }*/
 
-/* 解决element ui 样式问题 */
-button{
-    border-radius: 0!important;
-}
 
 /* 解决兼容问题 */
     /* IE input X 去掉文本框的叉叉和密码输入框的眼睛图标  */

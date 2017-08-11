@@ -6,7 +6,7 @@
                 <div class="f14">
                     <router-link :to="{name:'index'}">首页</router-link>
                     <router-link :to="{name:'blog'}">博客</router-link>
-                    <a href="javascript:;">关于我</a>
+                    <!-- <a href="javascript:;">关于我</a> -->
                 </div>
                 
             </div>
