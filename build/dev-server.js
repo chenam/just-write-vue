@@ -14,6 +14,11 @@ var webpackConfig = process.env.NODE_ENV === 'testing'
   ? require('./webpack.prod.conf')
   : require('./webpack.dev.conf')
 
+// 引入router
+const apiRoutes = express.Router();
+// 对json数据处理
+var bodyParser = require('body-parser');
+
 // default port where dev server listens for incoming traffic
 var port = process.env.PORT || config.dev.port
 // automatically open browser, if not set will be false
@@ -64,6 +69,19 @@ app.use(hotMiddleware)
 // serve pure static assets
 var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
 app.use(staticPath, express.static('./static'))
+// =================
+// mock 数据
+app.use('/mock',express.static('mock'));
+// 在线预览office文件
+app.use('/viewer', express.static('node_modules/node-viewerjs/release'));
+// parse application/x-www-form-urlencoded
+// app.use(bodyParser.urlencoded({ extended: false }))
+// app.use(bodyParser.json())
+// 引入api
+// const api = require("../server/api/index.js");
+// api(apiRoutes);
+// app.use('/api',apiRoutes)
+// =====================
 
 var uri = 'http://localhost:' + port
 

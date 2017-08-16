@@ -1,62 +1,127 @@
 <template>
     <div class="index">
-        <div class="pb10">
+        <div class="pb20">
+            <Breadcrumb >
+                    <Breadcrumb-item>文章管理</Breadcrumb-item>
+            </Breadcrumb>
+        </div>
+        <!-- 搜索 -->
+        <Form ref="formSearch" :model="formSearch" :rules="formSearchRule" inline>
+            <!-- <Form-item label="文章标题">
+                <Input type="text" v-model="formSearch.title" placeholder="请输入">
+                </Input>
+            </Form-item>
+            <Form-item>
+                <Button type="primary" @click="handleSearch('formSearch')">查询</Button>
+            </Form-item> -->
+        </Form>
+        <div class="pb20">
             <Button type="primary" @click='addArticle'>新增文章</Button>
         </div>
-         
-        <Table :columns="columns1" :data="data1"></Table>
+        
+        <Table :columns="columns1" :data="tableList"></Table>
     </div>
 </template>
 
 <script>
 import $ from 'jquery';
+import { queryArticleList } from '../../../api/api.js';
 export default {
-    name: 'index',
+    title: 'index',
     data () {
         return {
             columns1: [
                 {
-                    title: '姓名',
-                    key: 'name'
+                    title: '标题',
+                    key: 'title'
                 },
                 {
-                    title: '年龄',
-                    key: 'age'
+                    title: '内容',
+                    key: 'content'
                 },
                 {
-                    title: '地址',
-                    key: 'address'
+                    title: '创建时间',
+                    key: 'date'
+                },
+                {
+                    title:'操作',
+                    key: 'action',
+                    align: 'center',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('a', {
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.handleView(params.index)
+                                    }
+                                }
+                            }, '查看'),
+                            h('a', {
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.handleEdit(params.index)
+                                    }
+                                }
+                            }, '编辑'),
+                            h('a', {
+                                on: {
+                                    click: () => {
+                                        this.handleRemove(params.index)
+                                    }
+                                }
+                            }, '删除')
+                        ]);
+                    }
                 }
             ],
-            data1: [
+            tableList: [
                 {
-                    name: '王小明',
+                    title: '王小明',
                     age: 18,
                     address: '北京市朝阳区芍药居'
                 },
                 {
-                    name: '张小刚',
+                    title: '张小刚',
                     age: 25,
                     address: '北京市海淀区西二旗'
                 },
                 {
-                    name: '李小红',
+                    title: '李小红',
                     age: 30,
                     address: '上海市浦东新区世纪大道'
                 },
                 {
-                    name: '周小伟',
+                    title: '周小伟',
                     age: 26,
                     address: '深圳市南山区深南大道'
                 }
-            ]
+            ],
+            formSearch: {
+                title: ''
+            },
+            formSearchRule: {
+                title: [
+                    { required: true, message: '请填写用户名', trigger: 'blur' }
+                ]
+            }
         }
     },
     created(){
-        this.init();
-        setTimeout(()=>{
-            console.log($('.pb10'));
-        },1000)
+        this.init(); 
+        let para = {};
+        queryArticleList(para)
+            .then( (res) => {
+                this.tableList = res.data;
+            })
+            .catch(function(error){
+                console.log(error);
+            });
     },
     methods : {
         init(){
@@ -68,6 +133,21 @@ export default {
 
                 }
             })
+        },
+        // 查看
+        handleView(){
+
+        },
+        // 编辑
+        handleEdit(){
+
+        },
+        // 删除
+        handleRemove(){
+
+        },
+        handleSearch(){
+
         }
     }
 }

@@ -15,12 +15,12 @@ var route = require("./api/index.js");
 
 var app = express();
 
-route(app);
 
 
-app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 
+route(app);
 
 // app.use(api);
 
