@@ -5,7 +5,9 @@ const Schema = mongoose.Schema;
 const ArticleSchema = new Schema({
     title : String,
     content : String, 
-    date : Date
+    date : Date,
+    createDate : Date,
+    modifyDate : Date 
 })
 
 const Models = {

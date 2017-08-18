@@ -2,29 +2,36 @@
     <div class="index">
         <div class="pb20">
             <Breadcrumb >
-                    <Breadcrumb-item>文章管理</Breadcrumb-item>
+                <Breadcrumb-item>文章管理</Breadcrumb-item>
             </Breadcrumb>
         </div>
         <!-- 搜索 -->
-        <Form ref="formSearch" :model="formSearch" :rules="formSearchRule" inline>
-            <!-- <Form-item label="文章标题">
+        <!-- <Form ref="formSearch" :model="formSearch" :rules="formSearchRule" inline>
+            <Form-item label="文章标题">
                 <Input type="text" v-model="formSearch.title" placeholder="请输入">
                 </Input>
             </Form-item>
             <Form-item>
                 <Button type="primary" @click="handleSearch('formSearch')">查询</Button>
-            </Form-item> -->
-        </Form>
+            </Form-item>
+        </Form> -->
         <div class="pb20">
             <Button type="primary" @click='addArticle'>新增文章</Button>
         </div>
         
         <Table :columns="columns1" :data="tableList"></Table>
+        <div class="page-wrapper">
+            <Page :total="total" show-sizer show-total :page-size-opts="[10,20,50]" 
+            @on-change='handlePageChange' 
+            @on-page-size-change='handlePageSizeChange'
+            ></Page>
+        </div>
     </div>
 </template>
 
 <script>
 import $ from 'jquery';
+import qs from 'qs';
 import { queryArticleList } from '../../../api/api.js';
 export default {
     title: 'index',
@@ -40,8 +47,8 @@ export default {
                     key: 'content'
                 },
                 {
-                    title: '创建时间',
-                    key: 'date'
+                    title: '修改时间',
+                    key: 'modifyDate'
                 },
                 {
                     title:'操作',
@@ -65,7 +72,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.handleEdit(params.index)
+                                        this.handleEdit(params)
                                     }
                                 }
                             }, '编辑'),
@@ -109,28 +116,42 @@ export default {
                 title: [
                     { required: true, message: '请填写用户名', trigger: 'blur' }
                 ]
-            }
+            },
+            // 分页参数
+            pageStart : 1,
+            pageSize : 10,
+            total : 0
         }
     },
     created(){
-        this.init(); 
-        let para = {};
-        queryArticleList(para)
-            .then( (res) => {
-                this.tableList = res.data;
-            })
-            .catch(function(error){
-                console.log(error);
-            });
+        // 获得初始列表
+        this.getInitData(); 
+        
     },
     methods : {
-        init(){
+        getInitData(){
+            let param = {
+                pageStart : (this.pageStart-1)*this.pageSize,
+                pageSize : this.pageSize
+            };
+            queryArticleList(qs.stringify(param))
+                .then( (res) => {
+                    let _data = res.data;
+                    if(_data.success){
+                        this.tableList = _data.data.list;
+                        this.total = _data.data.count;
+                    }
+                    
+                })
+                .catch(function(error){
+                    console.log(error);
+                });
         },
         addArticle(){
             this.$router.push({
-                path:'/admin/article/articleAdd',
+                path:'/admin/article/articleHandle',
                 query:{
-
+                    type:'add'
                 }
             })
         },
@@ -139,8 +160,15 @@ export default {
 
         },
         // 编辑
-        handleEdit(){
-
+        handleEdit(params){
+            console.log(params);
+            this.$router.push({
+                path:'/admin/article/articleHandle',
+                query:{
+                    type:'edit',
+                    id:params.row._id
+                }
+            })
         },
         // 删除
         handleRemove(){
@@ -148,6 +176,14 @@ export default {
         },
         handleSearch(){
 
+        },
+        handlePageChange(val){
+            this.pageStart = val;
+            this.getInitData();
+        },
+        handlePageSizeChange(val){
+            this.pageSize = val;
+            this.getInitData();
         }
     }
 }
@@ -186,5 +222,9 @@ export default {
             }
         }
     }
+}
+.page-wrapper{
+    padding:30px 0;
+    text-align: right;
 }
 </style>
