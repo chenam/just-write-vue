@@ -1,4 +1,6 @@
 const mongoose = require('mongoose').set('debug', true);
+var moment = require("moment");
+
 const Schema = mongoose.Schema;
 
 // 文章模型
@@ -6,8 +8,14 @@ const ArticleSchema = new Schema({
     title : String,
     content : String, 
     date : Date,
-    createDate : Date,
-    modifyDate : Date 
+    createDate : {
+        type:Date,
+        default:moment().format('YYYY-MM-DD HH:mm:ss')
+    },
+    modifyDate : {
+        type:Date,
+        default:moment().format('YYYY-MM-DD HH:mm:ss')
+    } 
 })
 
 const Models = {

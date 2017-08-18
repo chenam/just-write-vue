@@ -6,15 +6,19 @@
             </Breadcrumb>
         </div>
         <!-- 搜索 -->
-        <!-- <Form ref="formSearch" :model="formSearch" :rules="formSearchRule" inline>
-            <Form-item label="文章标题">
-                <Input type="text" v-model="formSearch.title" placeholder="请输入">
-                </Input>
-            </Form-item>
-            <Form-item>
-                <Button type="primary" @click="handleSearch('formSearch')">查询</Button>
-            </Form-item>
-        </Form> -->
+        <div class="search-wrapper">
+            <Form :model="formSearch" inline :rules="formSearchRule" ref="formSearch">
+                <Form-item label="文章标题:" :label-width="80">
+                    <Input v-model="formSearch.title" placeholder="请输入"></Input>
+                </Form-item>
+                <Form-item label="文章内容:" :label-width="80">
+                    <Input v-model="formSearch.content" placeholder="请输入"></Input>
+                </Form-item>
+                <Form-item>
+                   <Button type="primary" @click="handleSearch('formSearch')">查询</Button>
+               </Form-item>
+            </Form>
+        </div>
         <div class="pb20">
             <Button type="primary" @click='addArticle'>新增文章</Button>
         </div>
@@ -33,6 +37,7 @@
 import $ from 'jquery';
 import qs from 'qs';
 import { queryArticleList } from '../../../api/api.js';
+import moment from 'moment';
 export default {
     title: 'index',
     data () {
@@ -48,7 +53,20 @@ export default {
                 },
                 {
                     title: '修改时间',
-                    key: 'modifyDate'
+                    key: 'modifyDate',
+                    render : (h,params)=> {
+                        // console.log(h,params)
+                        let arr = [];
+                        if(params.row.modifyDate){
+                            arr = h('span', {
+               
+                            },params.row.modifyDate.toLocaleString())
+                        }else{
+                            arr = h('span', { 
+                            }, '--')
+                        }
+                        return arr;
+                    }
                 },
                 {
                     title:'操作',
@@ -87,30 +105,10 @@ export default {
                     }
                 }
             ],
-            tableList: [
-                {
-                    title: '王小明',
-                    age: 18,
-                    address: '北京市朝阳区芍药居'
-                },
-                {
-                    title: '张小刚',
-                    age: 25,
-                    address: '北京市海淀区西二旗'
-                },
-                {
-                    title: '李小红',
-                    age: 30,
-                    address: '上海市浦东新区世纪大道'
-                },
-                {
-                    title: '周小伟',
-                    age: 26,
-                    address: '深圳市南山区深南大道'
-                }
-            ],
+            tableList: [],
             formSearch: {
-                title: ''
+                title: '',
+                content :''
             },
             formSearchRule: {
                 title: [
@@ -126,15 +124,17 @@ export default {
     created(){
         // 获得初始列表
         this.getInitData(); 
-        
+        // console.log(moment.utc())
     },
     methods : {
         getInitData(){
             let param = {
+                title: this.formSearch.title,
+                content: this.formSearch.content,
                 pageStart : (this.pageStart-1)*this.pageSize,
                 pageSize : this.pageSize
             };
-            queryArticleList(qs.stringify(param))
+            queryArticleList(param)
                 .then( (res) => {
                     let _data = res.data;
                     if(_data.success){
@@ -175,7 +175,8 @@ export default {
 
         },
         handleSearch(){
-
+            this.pageStart = 1;
+            this.getInitData();
         },
         handlePageChange(val){
             this.pageStart = val;

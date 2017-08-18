@@ -6,7 +6,7 @@
 
 因为刚开始的时候，设置了`application/x-www-form-urlencoded`格式发送数据,数据必须是`URLSearchParams`类型，或者字符串参数`a=1&b=2`格式
 
-可以引入`qs`模块格式化一下
+可以引入`qs`模块格式化一下,后来试了一下，可以的
 
 ```
 var qs = require('qs');

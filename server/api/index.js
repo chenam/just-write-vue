@@ -18,6 +18,8 @@
 var RestResult = require('../RestResult.js');
 /*引入统一分页查询接口*/
 var PageQuery = require('../common/pageQuery.js');
+// 引入格式化日期
+var moment = require("moment");
 
 const Models = require('../db/db.js');
 module.exports = function(apiRoutes){
@@ -39,11 +41,22 @@ module.exports = function(apiRoutes){
 
         let _pageSize = parseInt(req.body.pageSize);
         let _pageStart = parseInt(req.body.pageStart);
+        let _title = req.body.title;
+        let _content = req.body.content;
 
+        const reg = new RegExp(_title,'i'); //不区分大小写
+        const reg1 = new RegExp(_content,'i'); //不区分大小写
+        
+        // 查询条件
         let searchData = {
-
+            'title':{$regex:reg},'content':{$regex:reg1}
+            
         };
-        PageQuery(_pageStart,_pageSize,Models.Article,'',searchData,{},(err,$page)=>{
+        // 排序方式//-1是降序,1是升序
+        let sortData = {
+            modifyDate : -1
+        }
+        PageQuery(_pageStart,_pageSize,Models.Article,'',searchData,sortData,(err,$page)=>{
 
             if(err){
                 restResult.errorMsg = err.codeName;
@@ -53,18 +66,6 @@ module.exports = function(apiRoutes){
             }
             res.send(restResult);
         })
-
-        // 链式查询，且skip和limit方法参数为数字
-        // Models.Article.find(searchData).skip(_pageStart).limit(_pageSize).exec((err, doc) => {
-        //     if(err){
-        //         restResult.errorMsg = err.codeName;
-        //     }else if (doc){ 
-        //         restResult.success = true;
-        //         restResult.data = doc;
-                
-        //     };
-        //     res.send(restResult);
-        // });
 
     });
 
