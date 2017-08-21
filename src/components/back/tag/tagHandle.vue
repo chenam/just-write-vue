@@ -3,7 +3,7 @@
         <!-- 面包屑 -->
         <div class="pb20">
             <Breadcrumb>
-                    <Breadcrumb-item href="/admin/article/articleTable">文章管理</Breadcrumb-item>
+                    <Breadcrumb-item href="/admin/article/articleTable">标签管理</Breadcrumb-item>
                     <Breadcrumb-item >{{type=='edit'?"编辑文章":"新增文章"}}</Breadcrumb-item>
             </Breadcrumb>
         </div>
