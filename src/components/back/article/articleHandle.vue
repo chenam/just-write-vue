@@ -15,6 +15,18 @@
             <Form-item label="内容：" prop="content">
                 <Input v-model="formItem.content" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入..."></Input>
             </Form-item>
+            <Form-item label="封面图：" >
+                <img :src="imgUrl" v-if='imgUrl'>
+                <Upload 
+                    ref="upload"
+                    action="/api/article/upload"
+                    :on-success="handleSuccess"
+                    :on-remove="handleRemove"
+                    name='cover'
+                >
+                    <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
+                </Upload>
+            </Form-item>
             <Form-item>
                 <Button type="primary" @click='handleArticle("formItem")'>确定</Button>
                 <Button type="ghost" style="margin-left: 8px" @click='handleCancel'>取消</Button>
@@ -41,8 +53,8 @@ export default {
                 content: [
                     { required: true, message: '请输入文章内容', trigger: 'blur' }
                 ]
-            }
-            
+            },
+            imgUrl:''            
         }
     },
     computed:{
@@ -62,6 +74,8 @@ export default {
         if(this.type == "edit"){
             this.getDataById();
         }
+    },
+    mounted(){
     },
     methods : {
         init(){
@@ -148,11 +162,23 @@ export default {
             })
             
         },
+        // 点击取消
         handleCancel(){
             this.$router.push({
                 path:'/admin/article/articleTable'
             })
-        }
+        },
+        // 上传成功
+        handleSuccess(res, file){
+            if(res.success){
+                this.imgUrl = '';
+            }
+        },
+        handleRemove (file) {
+            // 从 upload 实例删除数据
+            const fileList = this.$refs.upload.fileList;
+            this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
+        },
     }
 }
 </script>

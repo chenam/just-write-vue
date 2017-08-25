@@ -17,7 +17,12 @@ export const queryArticleById = params => {
     return axios.post(`${base}/article/getArticleById`,params);
 }
 
-// 修改文章
+// 删除文章
 export const editArticle = params => {
     return axios.post(`${base}/article/editArticle`,params);
+}
+
+// 修改文章
+export const removeArticle = params => {
+    return axios.post(`${base}/article/removeArticle`,params);
 }

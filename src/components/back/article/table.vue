@@ -36,7 +36,7 @@
 <script>
 import $ from 'jquery';
 import qs from 'qs';
-import { queryArticleList } from '../../../api/api.js';
+import { queryArticleList, removeArticle} from '../../../api/api.js';
 import moment from 'moment';
 export default {
     title: 'index',
@@ -56,11 +56,12 @@ export default {
                     key: 'modifyDate',
                     render : (h,params)=> {
                         // console.log(h,params)
+                        // params.row.modifyDate).utc().format('YYYY-MM-DD HH:mm:ss')
                         let arr = [];
                         if(params.row.modifyDate){
                             arr = h('span', {
                
-                            },params.row.modifyDate.toLocaleString())
+                            },moment(params.row.modifyDate).utcOffset(8).format('YYYY-MM-DD HH:mm:ss'))
                         }else{
                             arr = h('span', { 
                             }, '--')
@@ -97,7 +98,7 @@ export default {
                             h('a', {
                                 on: {
                                     click: () => {
-                                        this.handleRemove(params.index)
+                                        this.handleRemove(params)
                                     }
                                 }
                             }, '删除')
@@ -124,7 +125,7 @@ export default {
     created(){
         // 获得初始列表
         this.getInitData(); 
-        // console.log(moment.utc())
+        console.log(moment().format('YYYY-MM-DD HH:mm:ss')) //2014-09-24 23:36:09 )
     },
     methods : {
         getInitData(){
@@ -134,7 +135,7 @@ export default {
                 pageStart : (this.pageStart-1)*this.pageSize,
                 pageSize : this.pageSize
             };
-            queryArticleList(param)
+            queryArticleList(qs.stringify(param))
                 .then( (res) => {
                     let _data = res.data;
                     if(_data.success){
@@ -171,8 +172,21 @@ export default {
             })
         },
         // 删除
-        handleRemove(){
+        handleRemove(params){
+            const self = this;
+            const _params = {
+                articleId : params.row._id
+            };
+            removeArticle(qs.stringify(_param))
+                .then((res) => {
+                    let _data = res.data;
+                    if(_data.success){
+                        
+                    }
+                })
+                .catch((res) => {
 
+                });
         },
         handleSearch(){
             this.pageStart = 1;

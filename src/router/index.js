@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 /*==============*/
 import Index from '@/components/front/index'
-import Blog from '@/components/front/blog'
+import Blog from '@/components/front/blog/index'
 /*==============*/
 import Admin from '@/components/back/admin/index'
 import Home from '@/components/back/home/index'

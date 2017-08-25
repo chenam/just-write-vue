@@ -10,12 +10,15 @@ const ArticleSchema = new Schema({
     date : Date,
     createDate : {
         type:Date,
-        default:moment().format('YYYY-MM-DD HH:mm:ss')
+        default:Date.now()
     },
     modifyDate : {
         type:Date,
-        default:moment().format('YYYY-MM-DD HH:mm:ss')
+        default:Date.now()
     } 
+},{
+    versionKey:false,
+    timestamps:{createAt : 'createDate',updatedAt : 'modifyDate'}
 })
 
 const Models = {

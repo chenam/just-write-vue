@@ -10,19 +10,17 @@ var path = require('path');
 var express = require('express');
 // 引入处理post数据的模块
 var bodyParser = require('body-parser');
-
+// 引入接口
 var route = require("./api/index.js");
+// 引入图片上传模块
+var multer = require("multer");
 
 var app = express();
-
-
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 route(app);
-
-// app.use(api);
 
 app.listen(8088);
 console.log('success listening');

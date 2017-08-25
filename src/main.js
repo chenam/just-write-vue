@@ -6,12 +6,16 @@ import router from './router'
 import iView from 'iview';
 import 'iview/dist/styles/iview.css';    // 使用 CSS
 import "./assets/css/common.css";
-import axios from 'axios'
+import axios from 'axios';
+import util from './assets/js/util.js'
 
 Vue.prototype.$http = axios;
 
 Vue.config.productionTip = false
 Vue.use(iView);
+
+// 过滤器
+Vue.filter('toDate',util.toDate);
 
 /* eslint-disable no-new */
 new Vue({

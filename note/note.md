@@ -17,3 +17,20 @@ axios.post('/foo', qs.stringify({ 'bar': 123 }));
 我到处找，到处看，最后**`app.use(bodyParser.json());` 一定要写在路由前面！** 
 
 ![问题1](./img/1.jpg)
+- 使用mongodb来存储日期的时候，`new Date()`创建的日期 monggodb会自动转换成UTC格式
+```
+// 1.引入了moment 组件
+
+moment(params.row.modifyDate).utc().format('YYYY-MM-DD HH:mm:ss')//格式化成字符串
+```
+- 下午15.02存的数据，但是取出来是上午7点，差了8个小时
+
+```
+//直接指定成东八区
+moment(params.row.modifyDate).utcOffset(8).format('YYYY-MM-DD HH:mm:ss'))
+```
+
+- 引入了multer以后，Unexpected field错误
+```
+multer有single()中的名称必须是表单上传字段的name名称。
+```
