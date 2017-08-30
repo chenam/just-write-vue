@@ -34,3 +34,11 @@ moment(params.row.modifyDate).utcOffset(8).format('YYYY-MM-DD HH:mm:ss'))
 ```
 multer有single()中的名称必须是表单上传字段的name名称。
 ```
+- 引入七牛云存储以后。报了 error:incorrect zone, please use up-z1.qiniu.com
+```
+原来是我的Zone 对象配错了。
+我们这边是华南，不是华东。
+var config = new qiniu.conf.Config();
+// 空间对应的机房
+config.zone = qiniu.zone.Zone_z2;
+```

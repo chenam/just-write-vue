@@ -8,11 +8,13 @@ import 'iview/dist/styles/iview.css';    // 使用 CSS
 import "./assets/css/common.css";
 import axios from 'axios';
 import util from './assets/js/util.js'
+import mavonEditor from 'mavon-editor'
 
 Vue.prototype.$http = axios;
 
 Vue.config.productionTip = false
 Vue.use(iView);
+Vue.use(mavonEditor);
 
 // 过滤器
 Vue.filter('toDate',util.toDate);

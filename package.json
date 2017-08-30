@@ -17,9 +17,12 @@
     "express": "^4.15.3",
     "iview": "^2.0.0",
     "jquery": "^2.2.3",
+    "mavon-editor": "^2.2.4",
     "mongoose": "^4.11.5",
     "multer": "^1.3.0",
     "node-viewerjs": "^0.6.6",
+    "qiniu": "^7.0.8",
+    "raw-loader": "^0.5.1",
     "vue": "^2.3.3",
     "vue-router": "^2.6.0"
   },

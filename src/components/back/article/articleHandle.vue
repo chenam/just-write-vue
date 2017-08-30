@@ -9,22 +9,27 @@
         </div>
         <!-- 列表 -->
         <Form :model="formItem" :label-width="100" class='formWrapper' :rules="formItemValidate" ref='formItem'>
-            <Form-item label="文章标题：" prop="title">
+            <Form-item label="文章标题：" prop="title" class='title'>
                 <Input v-model="formItem.title" placeholder="请输入"></Input>
             </Form-item>
             <Form-item label="内容：" prop="content">
-                <Input v-model="formItem.content" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入..."></Input>
+                <div >
+                    <mavon-editor style="height: 100%" v-model="formItem.content" class="editor" @change='getCode'></mavon-editor>
+                </div>
             </Form-item>
             <Form-item label="封面图：" >
-                <img :src="imgUrl" v-if='imgUrl'>
+               
                 <Upload 
                     ref="upload"
                     action="/api/article/upload"
                     :on-success="handleSuccess"
                     :on-remove="handleRemove"
                     name='cover'
+                    :show-upload-list = 'false'
+                   
                 >
-                    <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
+                    <img :src="imgUrl" v-if='imgUrl' class="img-cover">
+                    <Button type="ghost" icon="ios-cloud-upload-outline" v-else>上传文件</Button>
                 </Upload>
             </Form-item>
             <Form-item>
@@ -38,7 +43,9 @@
 <script>
 import $ from 'jquery';
 import qs from 'qs';
+import { mavonEditor } from 'mavon-editor'
 import { addArticle, queryArticleById, editArticle} from '../../../api/api.js';
+import 'mavon-editor/dist/css/index.css'
 export default {
     data () {
         return {
@@ -54,8 +61,12 @@ export default {
                     { required: true, message: '请输入文章内容', trigger: 'blur' }
                 ]
             },
-            imgUrl:''            
+            imgUrl:'',
+            editContent : ''       
         }
+    },
+    components: {
+        mavonEditor
     },
     computed:{
         type(){
@@ -102,6 +113,10 @@ export default {
                     
                 })
         },
+        getCode(val,render){
+            console.log(val,render);
+            this.editContent = render;
+        },
         // 添加文章
         handleArticle(name){
             const self = this;
@@ -135,6 +150,7 @@ export default {
                         let param = {
                             articleId : self.$route.query.id,
                             title : self.formItem.title,
+                            contentHTML : self.editContent,
                             content : self.formItem.content
                         }
                         console.log(param);
@@ -162,6 +178,9 @@ export default {
             })
             
         },
+        editorChange(){
+
+        },
         // 点击取消
         handleCancel(){
             this.$router.push({
@@ -171,7 +190,7 @@ export default {
         // 上传成功
         handleSuccess(res, file){
             if(res.success){
-                this.imgUrl = '';
+                this.imgUrl = res.result.url;
             }
         },
         handleRemove (file) {
@@ -185,8 +204,21 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang='less'>
+
 .formWrapper{
-    max-width: 800px;
+    .title{
+        max-width: 800px;
+    }
+    .editor{
+        min-height: 400px;
+    }
+}
+.img-cover{
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+    cursor: pointer;
 }
 
 </style>

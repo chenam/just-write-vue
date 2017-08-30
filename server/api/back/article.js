@@ -9,8 +9,12 @@ var PageQuery = require('../../common/pageQuery.js');
 var moment = require("moment");
 /*引入上传图片的组件*/
 var multer = require("../../multer.js");
+/*引入qiniu*/
+var qiniu = require("qiniu");
 
 const Models = require('../../db/db.js');
+
+var uploadFun = require('../../common/upload.js');
 
 apiRoutes.all("*", function(req, res, next) {
   // res.writeHead(200, { "Content-Type": "text/plain" })
@@ -77,6 +81,7 @@ apiRoutes.post('/api/article/addArticle',(req, res) => {
     */
     let _title = req.body.title;
     let _content = req.body.content;
+    let _contentHTML = req.body.content;
     // 参数校验
     if(!_title || !_content){
         restResult.errorMsg = "参数为空";
@@ -86,6 +91,7 @@ apiRoutes.post('/api/article/addArticle',(req, res) => {
     const article = {
         title: req.body.title,
         content: req.body.content,
+        contentHTML : req.body.contentHTML
         // createDate : new Date(),
         // modifyDate : new Date()
     }
@@ -211,15 +217,27 @@ apiRoutes.post('/api/article/removeArticle',(req, res) => {
     });
 });
 
-
+/**
+ * [文章封面上传]
+ * @param  {[type]} '/api/article/upload' [description]
+ * @param  {[articleId]}[文章id]
+ * @return {[type]}                            [description]
+ */
 apiRoutes.post('/api/article/upload',multer.single('cover'),(req, res) => {
+    let readableStream = req.file; // 可读的流
+    let key = req.file.originalname;
+    let localFile = req.file.path;
+    // 七牛返回的数据
+    uploadFun(readableStream,key,localFile)
+        .then((doc)=>{
+            let restResult = new RestResult(); 
+            if(req){
 
-    let restResult = new RestResult(); 
-    if(req){
-        restResult.success = true
-        restResult.data = req.file;
-    }
-    res.send(restResult);
-
+                restResult.success = true
+                restResult.data = req.file;
+                restResult.result = doc;
+            }
+            res.send(restResult);
+        })
 });
 module.exports = apiRoutes

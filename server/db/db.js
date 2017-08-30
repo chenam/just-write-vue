@@ -5,13 +5,22 @@ const Schema = mongoose.Schema;
 
 // 文章模型
 const ArticleSchema = new Schema({
+    // 文章标题
     title : String,
+    // 文章内容（源内容）
     content : String, 
+    // 文章内容（html代码）
+    contentHTML : String,
+    // 日期，废弃字段
     date : Date,
+    // 封面路径
+    imgUrl : String,
+    // 创建日期
     createDate : {
         type:Date,
         default:Date.now()
     },
+    // 修改日期
     modifyDate : {
         type:Date,
         default:Date.now()
