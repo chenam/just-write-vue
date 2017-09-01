@@ -36,7 +36,7 @@
 <script>
 import $ from 'jquery';
 import qs from 'qs';
-import { queryArticleList, removeArticle} from '../../../api/api.js';
+import { queryArticleList, removeArticle, toggleArticlePublish} from '../../../api/api.js';
 import moment from 'moment';
 export default {
     title: 'index',
@@ -49,7 +49,22 @@ export default {
                 },
                 {
                     title: '内容',
-                    key: 'content'
+                    key: 'content',
+                    render : (h,params)=> {
+                        return h('div', [
+                            h('p', {
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                class:'ellipsis',
+                                on: {
+                                    click: () => {
+                                        
+                                    }
+                                }
+                            }, params.row.content)
+                        ]);
+                    }
                 },
                 {
                     title: '修改时间',
@@ -74,17 +89,18 @@ export default {
                     key: 'action',
                     align: 'center',
                     render: (h, params) => {
+                        console.log(params.row.isPublish)
                         return h('div', [
-                            h('a', {
-                                style: {
-                                    marginRight: '5px'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.handleView(params.index)
-                                    }
-                                }
-                            }, '查看'),
+                            // h('a', {
+                            //     style: {
+                            //         marginRight: '5px'
+                            //     },
+                            //     on: {
+                            //         click: () => {
+                            //             this.handleView(params.index)
+                            //         }
+                            //     }
+                            // }, '查看'),
                             h('a', {
                                 style: {
                                     marginRight: '5px'
@@ -95,13 +111,38 @@ export default {
                                     }
                                 }
                             }, '编辑'),
-                            h('a', {
+
+                            h('Poptip', {
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                props : {
+                                    title : '您确认删除这条内容吗？',
+                                    confirm : true,
+                                },
+                                
                                 on: {
-                                    click: () => {
+                                    'on-ok': () => {
                                         this.handleRemove(params)
                                     }
                                 }
-                            }, '删除')
+                            },[
+                                h('a',{
+                                    props : {
+                                        href : 'javascript:;'
+                                    }
+                                },'删除')
+                            ]),
+                            h('a', {
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.handlePublish(params)
+                                    }
+                                }
+                            }, params.row.isPublish ? '取消发布' : '发布')
                         ]);
                     }
                 }
@@ -171,17 +212,37 @@ export default {
                 }
             })
         },
+        // 发布 && 取消发布
+        handlePublish(params){
+            console.log(params);
+            const self = this;
+            let _param = {
+                articleId : params.row._id,
+                isPublish : !params.row.isPublish
+            }
+            toggleArticlePublish(qs.stringify(_param))
+                .then((res) => {
+                    let _data = res.data;
+                    if(_data.success){
+                        this.$Message.success(_data.msg);
+                        self.getInitData()
+                    }
+                })
+                .catch((res) => {
+
+                });
+        },
         // 删除
         handleRemove(params){
             const self = this;
-            const _params = {
+            const _param = {
                 articleId : params.row._id
             };
             removeArticle(qs.stringify(_param))
                 .then((res) => {
                     let _data = res.data;
                     if(_data.success){
-                        
+                        self.getInitData()
                     }
                 })
                 .catch((res) => {

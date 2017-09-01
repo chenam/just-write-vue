@@ -11,7 +11,6 @@ import ArticleHandle from '@/components/back/article/articleHandle'
 import ArticleIndex from '@/components/back/article/index'
 import TagIndex from '@/components/back/tag/index'
 import TagTable from '@/components/back/tag/table'
-import TagHandle from '@/components/back/tag/tagHandle'
 /*==============*/
 Vue.use(Router)
 
@@ -47,8 +46,7 @@ const router = new Router({
                     name: 'tag', 
                     component: TagIndex, 
                     children:[
-                        {path: 'tagTable', name: 'tagTable', component: TagTable, meta: {title: '标签列表'}},
-                        {path: 'tagHandle', name: 'tagHandle', component: TagHandle, meta: {title: '标签操作'}}
+                        {path: 'tagTable', name: 'tagTable', component: TagTable, meta: {title: '标签列表'}}
                     ]
                 },
             ]

@@ -4,7 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import iView from 'iview';
-import 'iview/dist/styles/iview.css';    // 使用 CSS
+import './my-theme.less';    // 使用 CSS
 import "./assets/css/common.css";
 import axios from 'axios';
 import util from './assets/js/util.js'

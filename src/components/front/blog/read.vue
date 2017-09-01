@@ -1,16 +1,12 @@
 <template>
     <div class="blog">
         <div class="header-wrapper">
-            <ul class="clearfix">
-                <li v-for= '(item,index) in navData' @click='typeChange(item,index)'>{{item.name}}</li>
-            </ul>
+            读书
         </div>
         <div class="nav-wrapper">
         </div>
         <div>
-            <Tech key="1" v-if='activeType == "1"'></Tech>
-            <Read key="2" v-else-if='activeType == "2"'></Read>
-            <Essay key="3" v-else-if='activeType == "3"'></Essay>
+            
         </div>
         <div>
             
@@ -19,22 +15,15 @@
 </template>
 
 <script>
-import Tech from './tech';
-import Read from './read';
-import Essay from './essay';
 export default {
     name: 'blog',
-    components : {
-        Tech,Read,Essay
-    },
     data () {
         return {
             navData:[
                 {name:'技术',value:'1'},
                 {name:'读书',value:'2'},
                 {name:'随笔',value:'3'}
-            ],
-            activeType : '1'
+            ]
         }
     },
     created(){
@@ -42,9 +31,6 @@ export default {
     },
     methods : {
         init(){
-        },
-        typeChange(item,index){
-            this.activeType = item.value;
         }
     }
 }

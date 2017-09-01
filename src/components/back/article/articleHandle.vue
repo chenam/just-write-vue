@@ -14,7 +14,15 @@
             </Form-item>
             <Form-item label="内容：" prop="content">
                 <div >
-                    <mavon-editor style="height: 100%" v-model="formItem.content" class="editor" @change='getCode'></mavon-editor>
+                    <mavon-editor 
+                        style="height: 100%" 
+                        v-model="formItem.content" 
+                        class="editor" 
+                        ref="mavonEditor"
+                        @change='getCode'
+                        @imgAdd="$imgAdd" 
+                        @imgDel="$imgDel"
+                        ></mavon-editor>
                 </div>
             </Form-item>
             <Form-item label="封面图：" >
@@ -24,7 +32,7 @@
                     action="/api/article/upload"
                     :on-success="handleSuccess"
                     :on-remove="handleRemove"
-                    name='cover'
+                    name='file'
                     :show-upload-list = 'false'
                    
                 >
@@ -44,7 +52,7 @@
 import $ from 'jquery';
 import qs from 'qs';
 import { mavonEditor } from 'mavon-editor'
-import { addArticle, queryArticleById, editArticle} from '../../../api/api.js';
+import { addArticle, queryArticleById, editArticle, uploadImg} from '../../../api/api.js';
 import 'mavon-editor/dist/css/index.css'
 export default {
     data () {
@@ -61,8 +69,11 @@ export default {
                     { required: true, message: '请输入文章内容', trigger: 'blur' }
                 ]
             },
+            // 封面路径
             imgUrl:'',
-            editContent : ''       
+            editContent : '' ,
+            // 
+            img_file : {}   
         }
     },
     components: {
@@ -103,6 +114,7 @@ export default {
                     let _data = res.data;
                     if(_data.success){
                         this.formItem = _data.data;
+                        this.imgUrl = _data.data.imgUrl;
                     }else{
                         this.$Message.warning(_data.errorMsg);
                     };
@@ -113,9 +125,31 @@ export default {
                     
                 })
         },
+        // 获得makeDown 代码
         getCode(val,render){
-            console.log(val,render);
+            // console.log(val,render);
             this.editContent = render;
+        },
+        // 添加图片
+        $imgAdd(pos, $file){
+        
+        const self = this;
+            let formData = new FormData();
+            formData.append('file',$file);
+            uploadImg(formData)
+                .then( (res) => {
+                    let _data = res.data;
+                    if(_data.success){
+                        console.log(pos,_data.result.url);
+                        self.$refs.mavonEditor.$imgUpdateByUrl(pos,_data.result.url);
+                    }
+                })
+                .catch( (err) => {
+
+                })
+        },
+        $imgDel(pos){
+            delete this.img_file[pos];
         },
         // 添加文章
         handleArticle(name){
@@ -126,7 +160,8 @@ export default {
                     if(this.type == "add"){
                         let param = {
                             title : self.formItem.title,
-                            content : self.formItem.content
+                            content : self.formItem.content,
+                            imgUrl : this.imgUrl
                         };
                         addArticle(qs.stringify(param))
                             .then( (res) => {
@@ -151,7 +186,8 @@ export default {
                             articleId : self.$route.query.id,
                             title : self.formItem.title,
                             contentHTML : self.editContent,
-                            content : self.formItem.content
+                            content : self.formItem.content,
+                            imgUrl : self.imgUrl
                         }
                         console.log(param);
                         editArticle(qs.stringify(param))

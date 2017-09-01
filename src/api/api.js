@@ -17,12 +17,29 @@ export const queryArticleById = params => {
     return axios.post(`${base}/article/getArticleById`,params);
 }
 
-// 删除文章
+// 修改文章
 export const editArticle = params => {
     return axios.post(`${base}/article/editArticle`,params);
 }
 
-// 修改文章
+// 删除文章
 export const removeArticle = params => {
     return axios.post(`${base}/article/removeArticle`,params);
+}
+
+// 修改文章发布
+export const toggleArticlePublish = params => {
+    return axios.post(`${base}/article/toggleArticlePublish`,params);
+}
+
+// 上传图片
+export const uploadImg = params => {
+
+    // return axios.post(`${base}/article/editorUpload`,params);
+    return axios({
+        url: `${base}/article/editorUpload`,
+        method: 'post',
+        data: params,
+        headers: { 'Content-Type': 'multipart/form-data' }
+    })
 }

@@ -11,16 +11,13 @@
                 <Form-item label="文章标题:" :label-width="80">
                     <Input v-model="formSearch.title" placeholder="请输入"></Input>
                 </Form-item>
-                <Form-item label="文章内容:" :label-width="80">
-                    <Input v-model="formSearch.content" placeholder="请输入"></Input>
-                </Form-item>
                 <Form-item>
                    <Button type="primary" @click="handleSearch('formSearch')">查询</Button>
                </Form-item>
             </Form>
         </div>
         <div class="pb20">
-            <Button type="primary" @click='addArticle'>新增文章</Button>
+            <Button type="primary" @click='addTag'>新增标签</Button>
         </div>
         
         <Table :columns="columns1" :data="tableList"></Table>
@@ -30,6 +27,31 @@
             @on-page-size-change='handlePageSizeChange'
             ></Page>
         </div>
+        <!-- 弹窗 -->
+        <Modal
+            v-model="tagVisible"
+            :title="tagTitle"
+            :loading = 'tagLoading'
+            :mask-closable = 'false'
+        >
+            <Form :model="tagForm" :label-width="80" :rules="tagFormRule" ref='tagForm'>
+                <FormItem label="标签名：" prop='tagName'>
+                    <Input v-model="tagForm.tagName" placeholder="请输入"></Input>
+                </FormItem>
+                <FormItem label="类别：" prop='categoryId'>
+                    <Select v-model="tagForm.categoryId" placeholder="请选择" clearable >
+                        <Option value="beijing">北京市</Option>
+                        <Option value="shanghai">上海市</Option>
+                        <Option value="shenzhen">深圳市</Option>
+                    </Select>
+                </FormItem>
+            </Form>
+            <div slot="footer">
+                <Button  @click="tagCancel('tagForm')">取消</Button>
+                <Button type="primary"  @click="tagOk('tagForm')">确定</Button>
+            </div>
+            
+        </Modal>
     </div>
 </template>
 
@@ -40,6 +62,15 @@ import { queryArticleList } from '../../../api/api.js';
 import moment from 'moment';
 export default {
     title: 'index',
+    computed:{
+        tagTitle(){
+            if(this.type == "add"){
+                return '新增标签';
+            }else{
+                return '编辑标签';
+            }
+        }
+    },
     data () {
         return {
             columns1: [
@@ -80,16 +111,6 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.handleView(params.index)
-                                    }
-                                }
-                            }, '查看'),
-                            h('a', {
-                                style: {
-                                    marginRight: '5px'
-                                },
-                                on: {
-                                    click: () => {
                                         this.handleEdit(params)
                                     }
                                 }
@@ -118,7 +139,24 @@ export default {
             // 分页参数
             pageStart : 1,
             pageSize : 10,
-            total : 0
+            total : 0,
+            // 弹窗
+            tagVisible : false,
+            tagLoading : false,
+            // 弹窗类型
+            type: 'add',
+            tagForm:{
+                tagName : '',
+                categoryId : ''
+            },
+            tagFormRule:{
+                tagName: [
+                    { required: true, message: '请填写标签', trigger: 'blur' }
+                ],
+                categoryId: [
+                    { required: true, message: '请选择类别', trigger: 'blur' }
+                ]
+            }
         }
     },
     created(){
@@ -147,13 +185,9 @@ export default {
                     console.log(error);
                 });
         },
-        addArticle(){
-            this.$router.push({
-                path:'/admin/article/articleHandle',
-                query:{
-                    type:'add'
-                }
-            })
+        // 添加标签
+        addTag(){
+            this.tagVisible = true;
         },
         // 查看
         handleView(){
@@ -161,19 +195,33 @@ export default {
         },
         // 编辑
         handleEdit(params){
-            console.log(params);
-            this.$router.push({
-                path:'/admin/article/articleHandle',
-                query:{
-                    type:'edit',
-                    id:params.row._id
-                }
-            })
+            this.type = 'edit';
+            this.tagVisible = true;
         },
         // 删除
         handleRemove(){
 
         },
+        // 弹窗点击确定
+        tagOk(name){
+            this.$refs[name].validate((valid) => {
+                if (valid) {
+                    this.$Message.success('提交成功!');
+                } else {
+                    this.$Message.error('表单验证失败!');
+                }
+            })
+        },
+        // 弹窗点击取消
+        tagCancel(name){
+            const self = this;
+            self.tagVisible = false;
+            
+            setTimeout(function(){
+                self.$refs[name].resetFields();
+            },500)
+            
+        },  
         handleSearch(){
             this.pageStart = 1;
             this.getInitData();
