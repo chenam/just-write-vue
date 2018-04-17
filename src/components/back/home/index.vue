@@ -18,15 +18,19 @@
 <script>
 export default {
     name: 'index',
-    data () {
+    components: {
+    },
+    data() {
         return {
         }
     },
-    created(){
+    created() {
         this.init();
     },
-    methods : {
-        init(){
+    mounted() {
+    },
+    methods: {
+        init() {
         }
     }
 }
@@ -34,7 +38,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang='less'>
-
 .bg{
     position: absolute;
     right:100px;

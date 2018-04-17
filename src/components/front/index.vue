@@ -22,11 +22,11 @@ export default {
         return {
         }
     },
-    created(){
+    created() {
         this.init();
     },
-    methods : {
-        init(){
+    methods: {
+        init() {
         }
     }
 }

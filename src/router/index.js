@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-/*==============*/
+/* ============== */
 import Index from '@/components/front/index'
 import Blog from '@/components/front/blog/index'
-/*==============*/
+/* ============== */
 import Admin from '@/components/back/admin/index'
 import Home from '@/components/back/home/index'
 import ArticleTable from '@/components/back/article/table'
@@ -11,7 +11,7 @@ import ArticleHandle from '@/components/back/article/articleHandle'
 import ArticleIndex from '@/components/back/article/index'
 import TagIndex from '@/components/back/tag/index'
 import TagTable from '@/components/back/tag/table'
-/*==============*/
+/* ============== */
 Vue.use(Router)
 
 const router = new Router({
@@ -30,29 +30,27 @@ const router = new Router({
             path: '/admin',
             redirect: '/admin/home',
             component: Admin,
-            children:[
+            children: [
                 {path: 'home', name: 'home', component: Home, meta: {title: '博客首页'}},
                 {
                     path: 'article',
-                    name: 'article', 
-                    component: ArticleIndex, 
-                    children:[
+                    name: 'article',
+                    component: ArticleIndex,
+                    children: [
                         {path: 'articleTable', name: 'articleTable', component: ArticleTable, meta: {title: '文章列表'}},
                         {path: 'articleHandle', name: 'articleHandle', component: ArticleHandle, meta: {title: '文章操作'}}
                     ]
                 },
                 {
                     path: 'tag',
-                    name: 'tag', 
-                    component: TagIndex, 
-                    children:[
+                    name: 'tag',
+                    component: TagIndex,
+                    children: [
                         {path: 'tagTable', name: 'tagTable', component: TagTable, meta: {title: '标签列表'}}
                     ]
-                },
+                }
             ]
-        },
-
-
+        }
     ]
 });
 

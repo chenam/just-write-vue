@@ -17,20 +17,20 @@
 <script>
 export default {
     name: 'blog',
-    data () {
+    data() {
         return {
-            navData:[
-                {name:'技术',value:'1'},
-                {name:'读书',value:'2'},
-                {name:'随笔',value:'3'}
+            navData: [
+                {name: '技术', value: '1'},
+                {name: '读书', value: '2'},
+                {name: '随笔', value: '3'}
             ]
         }
     },
-    created(){
-        this.init();    
+    created() {
+        this.init();
     },
-    methods : {
-        init(){
+    methods: {
+        init() {
         }
     }
 }

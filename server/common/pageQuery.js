@@ -28,7 +28,6 @@ var pageQuery = function(pageStart,pageSize,Model,populate,queryParams,sortParam
             });
         }
     },function(err,results){
-        var count = results.count;
         $page.list = results.record;
         $page.count = results.count;
         callback(err,$page)

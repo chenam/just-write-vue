@@ -1,5 +1,7 @@
-const article = require('./back/article.js');
+const backArticle = require('./back/article.js');
+const frontArticle = require('./front/index.js');
 
 module.exports = (app) => {
-    app.use(article)
+    app.use(backArticle);
+    app.use(frontArticle);
 }

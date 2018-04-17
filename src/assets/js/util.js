@@ -1,6 +1,5 @@
 export default {
-    toDate(val){
-        console.log(val);
+    toDate(date) {
         if (date) {
             const d = new Date(date)
             const minutes = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes()

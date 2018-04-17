@@ -34,9 +34,8 @@
 </template>
 
 <script>
-import $ from 'jquery';
 import qs from 'qs';
-import { queryArticleList, removeArticle, toggleArticlePublish} from '../../../api/api.js';
+import { queryArticleList, removeArticle, toggleArticlePublish } from '../../../api/back/api.js';
 import moment from 'moment';
 export default {
     title: 'index',
@@ -50,16 +49,15 @@ export default {
                 {
                     title: '内容',
                     key: 'content',
-                    render : (h,params)=> {
+                    render: (h, params) => {
                         return h('div', [
                             h('p', {
                                 style: {
                                     marginRight: '5px'
                                 },
-                                class:'ellipsis',
+                                class: 'ellipsis',
                                 on: {
                                     click: () => {
-                                        
                                     }
                                 }
                             }, params.row.content)
@@ -69,38 +67,27 @@ export default {
                 {
                     title: '修改时间',
                     key: 'modifyDate',
-                    render : (h,params)=> {
+                    render: (h, params) => {
                         // console.log(h,params)
                         // params.row.modifyDate).utc().format('YYYY-MM-DD HH:mm:ss')
                         let arr = [];
-                        if(params.row.modifyDate){
+                        if (params.row.modifyDate) {
                             arr = h('span', {
-               
-                            },moment(params.row.modifyDate).utcOffset(8).format('YYYY-MM-DD HH:mm:ss'))
-                        }else{
-                            arr = h('span', { 
+                            }, moment(params.row.modifyDate).utcOffset(8).format('YYYY-MM-DD HH:mm:ss'))
+                        } else {
+                            arr = h('span', {
                             }, '--')
                         }
                         return arr;
                     }
                 },
                 {
-                    title:'操作',
+                    title: '操作',
                     key: 'action',
                     align: 'center',
                     render: (h, params) => {
                         console.log(params.row.isPublish)
                         return h('div', [
-                            // h('a', {
-                            //     style: {
-                            //         marginRight: '5px'
-                            //     },
-                            //     on: {
-                            //         click: () => {
-                            //             this.handleView(params.index)
-                            //         }
-                            //     }
-                            // }, '查看'),
                             h('a', {
                                 style: {
                                     marginRight: '5px'
@@ -116,22 +103,21 @@ export default {
                                 style: {
                                     marginRight: '5px'
                                 },
-                                props : {
-                                    title : '您确认删除这条内容吗？',
-                                    confirm : true,
+                                props: {
+                                    title: '您确认删除这条内容吗？',
+                                    confirm: true
                                 },
-                                
                                 on: {
                                     'on-ok': () => {
                                         this.handleRemove(params)
                                     }
                                 }
-                            },[
-                                h('a',{
-                                    props : {
-                                        href : 'javascript:;'
+                            }, [
+                                h('a', {
+                                    props: {
+                                        href: 'javascript:;'
                                     }
-                                },'删除')
+                                }, '删除')
                             ]),
                             h('a', {
                                 style: {
@@ -150,7 +136,7 @@ export default {
             tableList: [],
             formSearch: {
                 title: '',
-                content :''
+                content: ''
             },
             formSearchRule: {
                 title: [
@@ -158,72 +144,70 @@ export default {
                 ]
             },
             // 分页参数
-            pageStart : 1,
-            pageSize : 10,
-            total : 0
+            pageStart: 1,
+            pageSize: 10,
+            total: 0
         }
     },
-    created(){
+    created() {
         // 获得初始列表
-        this.getInitData(); 
-        console.log(moment().format('YYYY-MM-DD HH:mm:ss')) //2014-09-24 23:36:09 )
+        this.getInitData();
+        console.log(moment().format('YYYY-MM-DD HH:mm:ss')) // 2014-09-24 23:36:09 )
     },
-    methods : {
-        getInitData(){
+    methods: {
+        getInitData() {
             let param = {
                 title: this.formSearch.title,
                 content: this.formSearch.content,
-                pageStart : (this.pageStart-1)*this.pageSize,
-                pageSize : this.pageSize
+                pageStart: (this.pageStart - 1) * this.pageSize,
+                pageSize: this.pageSize
             };
             queryArticleList(qs.stringify(param))
-                .then( (res) => {
+                .then((res) => {
                     let _data = res.data;
-                    if(_data.success){
+                    if (_data.success) {
                         this.tableList = _data.data.list;
                         this.total = _data.data.count;
                     }
-                    
                 })
-                .catch(function(error){
+                .catch(function(error) {
                     console.log(error);
                 });
         },
-        addArticle(){
+        addArticle() {
             this.$router.push({
-                path:'/admin/article/articleHandle',
-                query:{
-                    type:'add'
+                path: '/admin/article/articleHandle',
+                query: {
+                    type: 'add'
                 }
             })
         },
         // 查看
-        handleView(){
-
+        handleView() {
         },
         // 编辑
-        handleEdit(params){
+        handleEdit(params) {
             console.log(params);
             this.$router.push({
-                path:'/admin/article/articleHandle',
-                query:{
-                    type:'edit',
-                    id:params.row._id
+                path: '/admin/article/articleHandle',
+                query: {
+                    type: 'edit',
+                    id: params.row._id
                 }
             })
         },
         // 发布 && 取消发布
-        handlePublish(params){
+        handlePublish(params) {
             console.log(params);
             const self = this;
             let _param = {
-                articleId : params.row._id,
-                isPublish : !params.row.isPublish
+                articleId: params.row._id,
+                isPublish: !params.row.isPublish
             }
             toggleArticlePublish(qs.stringify(_param))
                 .then((res) => {
                     let _data = res.data;
-                    if(_data.success){
+                    if (_data.success) {
                         this.$Message.success(_data.msg);
                         self.getInitData()
                     }
@@ -233,15 +217,15 @@ export default {
                 });
         },
         // 删除
-        handleRemove(params){
+        handleRemove(params) {
             const self = this;
             const _param = {
-                articleId : params.row._id
+                articleId: params.row._id
             };
             removeArticle(qs.stringify(_param))
                 .then((res) => {
                     let _data = res.data;
-                    if(_data.success){
+                    if (_data.success) {
                         self.getInitData()
                     }
                 })
@@ -249,15 +233,15 @@ export default {
 
                 });
         },
-        handleSearch(){
+        handleSearch() {
             this.pageStart = 1;
             this.getInitData();
         },
-        handlePageChange(val){
+        handlePageChange(val) {
             this.pageStart = val;
             this.getInitData();
         },
-        handlePageSizeChange(val){
+        handlePageSizeChange(val) {
             this.pageSize = val;
             this.getInitData();
         }

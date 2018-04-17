@@ -2,7 +2,7 @@
     <div class="layout">
             <div span="4" class="layout-menu-left">
                 <Menu :active-name="activeNum" theme="dark" width="auto" >
-                    <div class="layout-logo-left"></div>
+                    <div class="layout-logo-left">瞎记</div>
                     <Menu-item name="1">
                         <router-link to="/admin/home">
                             <Icon type="ios-home"></Icon>
@@ -58,27 +58,24 @@ export default {
             // activeNum:'0'
         }
     },
-    created(){
+    created() {
         this.init();
-
     },
-    computed:{
-        activeNum(){
-            if(this.$route.name == "home"){
+    computed: {
+        activeNum() {
+            if (this.$route.name === 'home') {
                 return '1';
-            }else if(this.$route.name == 'articleTable' || this.$route.name == 'articleHandle'){
+            } else if (this.$route.name === 'articleTable' || this.$route.name === 'articleHandle') {
                 return '2';
-            }else if(this.$route.name == 'tagTable' || this.$route.name == 'tagHandle'){
+            } else if (this.$route.name === 'tagTable' || this.$route.name === 'tagHandle') {
                 return '3';
-            }else{
+            } else {
                 return '0';
             }
-            
-            // console.log(this.route);
         }
     },
-    methods : {
-        init(){
+    methods: {
+        init() {
         }
     }
 }
@@ -137,7 +134,7 @@ export default {
         }
         .ivu-menu-dark.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu), .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title-active:not(.ivu-menu-submenu){
             a{
-                color: #2d8cf0;
+                color: #3fb07c;
             }
         }
 
@@ -158,10 +155,12 @@ export default {
     .layout-logo-left{
         width: 90%;
         height: 30px;
-        background: #5b6270;
+        background: #3fb07c;
         border-radius: 3px;
         margin: 15px auto;
-        
+        color : #fff;
+        text-align: center;
+        line-height: 30px;
     }
     .ivu-menu-vertical .ivu-menu-item, .ivu-menu-vertical .ivu-menu-submenu-title{
         padding:0;

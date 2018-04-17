@@ -49,10 +49,10 @@
 </template>
 
 <script>
-import $ from 'jquery';
+// import $ from 'jquery';
 import qs from 'qs';
 import { mavonEditor } from 'mavon-editor'
-import { addArticle, queryArticleById, editArticle, uploadImg} from '../../../api/api.js';
+import { addArticle, queryArticleById, editArticle, uploadImg } from '../../../api/back/api.js';
 import 'mavon-editor/dist/css/index.css'
 export default {
     data () {
@@ -70,162 +70,155 @@ export default {
                 ]
             },
             // 封面路径
-            imgUrl:'',
-            editContent : '' ,
-            // 
-            img_file : {}   
+            imgUrl: '',
+            editContent: '',
+            img_file: {}
         }
     },
     components: {
         mavonEditor
     },
-    computed:{
-        type(){
+    computed: {
+        type() {
             return this.$route.query.type;
         },
-        articleId(){
-            if(this.$route.query.type == "edit"){
+        articleId() {
+            if (this.$route.query.type === 'edit') {
                 return this.$route.query.articleId;
-            }else{
+            } else {
                 return '';
-            };
+            }
         }
     },
-    created(){
+    created() {
         this.init();
-        if(this.type == "edit"){
+        if (this.type === 'edit') {
             this.getDataById();
         }
     },
-    mounted(){
+    mounted() {
     },
-    methods : {
-        init(){
+    methods: {
+        init() {
         },
         // 根据id回填
-        getDataById(){
+        getDataById() {
             const self = this;
             let param = {
-                articleId : self.$route.query.id
+                articleId: self.$route.query.id
             };
 
             queryArticleById(qs.stringify(param))
-                .then( (res) => {
+                .then((res) => {
                     let _data = res.data;
-                    if(_data.success){
+                    if (_data.success) {
                         this.formItem = _data.data;
                         this.imgUrl = _data.data.imgUrl;
-                    }else{
+                    } else {
                         this.$Message.warning(_data.errorMsg);
                     };
-                    
                 })
-                .catch( (err) => {
+                .catch((err) => {
                     console.log(err);
-                    
                 })
         },
         // 获得makeDown 代码
-        getCode(val,render){
+        getCode(val, render) {
             // console.log(val,render);
             this.editContent = render;
+            console.log(render);
         },
         // 添加图片
-        $imgAdd(pos, $file){
-        
+        $imgAdd(pos, $file) {
         const self = this;
             let formData = new FormData();
-            formData.append('file',$file);
+            formData.append('file', $file);
             uploadImg(formData)
-                .then( (res) => {
+                .then((res) => {
                     let _data = res.data;
-                    if(_data.success){
-                        console.log(pos,_data.result.url);
-                        self.$refs.mavonEditor.$imgUpdateByUrl(pos,_data.result.url);
+                    if (_data.success) {
+                        console.log(pos, _data.result.url);
+                        self.$refs.mavonEditor.$imgUpdateByUrl(pos, _data.result.url);
                     }
                 })
-                .catch( (err) => {
-
-                })
         },
-        $imgDel(pos){
+        $imgDel(pos) {
             delete this.img_file[pos];
         },
         // 添加文章
-        handleArticle(name){
+        handleArticle(name) {
             const self = this;
             this.$refs[name].validate((valid) => {
                 if (valid) {
                     // 新增
-                    if(this.type == "add"){
+                    if (this.type === 'add') {
                         let param = {
-                            title : self.formItem.title,
-                            content : self.formItem.content,
-                            imgUrl : this.imgUrl
+                            title: self.formItem.title,
+                            content: self.formItem.content,
+                            contentHTML: self.editContent,
+                            imgUrl: this.imgUrl
                         };
                         addArticle(qs.stringify(param))
-                            .then( (res) => {
+                            .then((res) => {
                                 let _data = res.data;
-                                if(_data.success){
+                                if (_data.success) {
                                     this.$Message.success(_data.msg);
                                     this.$router.push({
-                                        path:'/admin/article/articleTable',
-                                        query:{
+                                        path: '/admin/article/articleTable',
+                                        query: {
                                         }
                                     })
-                                }else{
+                                } else {
                                     this.$Message.warning(_data.errorMsg);
-                                }; 
+                                };
                             })
-                            .catch( (err) => {
+                            .catch((err) => {
                                 console.log(err);
                             })
                     // 修改
-                    }else{
+                    } else {
                         let param = {
-                            articleId : self.$route.query.id,
-                            title : self.formItem.title,
-                            contentHTML : self.editContent,
-                            content : self.formItem.content,
-                            imgUrl : self.imgUrl
+                            articleId: self.$route.query.id,
+                            title: self.formItem.title,
+                            contentHTML: self.editContent,
+                            content: self.formItem.content,
+                            imgUrl: self.imgUrl
                         }
                         console.log(param);
                         editArticle(qs.stringify(param))
-                            .then( (res) => {
+                            .then((res) => {
                                 let _data = res.data;
-                                if(_data.success){
+                                if (_data.success) {
                                     this.$Message.success(_data.msg);
                                     this.$router.push({
-                                        path:'/admin/article/articleTable',
-                                        query:{
+                                        path: '/admin/article/articleTable',
+                                        query: {
                                         }
                                     })
-                                }else{
+                                } else {
                                     this.$Message.warning(_data.errorMsg);
-                                }; 
+                                };
                             })
-                            .catch( (err) => {
+                            .catch((err) => {
                                 console.log(err);
                             })
                     }
-                    
                 } else {
                 }
             })
-            
         },
-        editorChange(){
+        editorChange() {
 
         },
         // 点击取消
-        handleCancel(){
+        handleCancel() {
             this.$router.push({
-                path:'/admin/article/articleTable'
+                path: '/admin/article/articleTable'
             })
         },
         // 上传成功
-        handleSuccess(res, file){
-            if(res.success){
+        handleSuccess(res, file) {
+            if (res.success) {
                 this.imgUrl = res.result.url;
             }
         },
@@ -233,7 +226,7 @@ export default {
             // 从 upload 实例删除数据
             const fileList = this.$refs.upload.fileList;
             this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
-        },
+        }
     }
 }
 </script>

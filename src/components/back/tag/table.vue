@@ -56,17 +56,17 @@
 </template>
 
 <script>
-import $ from 'jquery';
-import qs from 'qs';
-import { queryArticleList } from '../../../api/api.js';
-import moment from 'moment';
+// import $ from 'jquery';
+// import qs from 'qs';
+import { queryArticleList } from '../../../api/back/api.js';
+// import moment from 'moment';
 export default {
     title: 'index',
-    computed:{
-        tagTitle(){
-            if(this.type == "add"){
+    computed: {
+        tagTitle() {
+            if (this.type === 'add') {
                 return '新增标签';
-            }else{
+            } else {
                 return '编辑标签';
             }
         }
@@ -85,22 +85,21 @@ export default {
                 {
                     title: '修改时间',
                     key: 'modifyDate',
-                    render : (h,params)=> {
+                    render: (h, params) => {
                         // console.log(h,params)
                         let arr = [];
-                        if(params.row.modifyDate){
+                        if (params.row.modifyDate) {
                             arr = h('span', {
-               
-                            },params.row.modifyDate.toLocaleString())
-                        }else{
-                            arr = h('span', { 
+                            }, params.row.modifyDate.toLocaleString())
+                        } else {
+                            arr = h('span', {
                             }, '--')
                         }
                         return arr;
                     }
                 },
                 {
-                    title:'操作',
+                    title: '操作',
                     key: 'action',
                     align: 'center',
                     render: (h, params) => {
@@ -129,7 +128,7 @@ export default {
             tableList: [],
             formSearch: {
                 title: '',
-                content :''
+                content: ''
             },
             formSearchRule: {
                 title: [
@@ -137,19 +136,19 @@ export default {
                 ]
             },
             // 分页参数
-            pageStart : 1,
-            pageSize : 10,
-            total : 0,
+            pageStart: 1,
+            pageSize: 10,
+            total: 0,
             // 弹窗
-            tagVisible : false,
-            tagLoading : false,
+            tagVisible: false,
+            tagLoading: false,
             // 弹窗类型
             type: 'add',
-            tagForm:{
-                tagName : '',
-                categoryId : ''
+            tagForm: {
+                tagName: '',
+                categoryId: ''
             },
-            tagFormRule:{
+            tagFormRule: {
                 tagName: [
                     { required: true, message: '请填写标签', trigger: 'blur' }
                 ],
@@ -159,51 +158,48 @@ export default {
             }
         }
     },
-    created(){
+    created() {
         // 获得初始列表
-        this.getInitData(); 
+        this.getInitData();
         // console.log(moment.utc())
     },
-    methods : {
-        getInitData(){
+    methods: {
+        getInitData() {
             let param = {
                 title: this.formSearch.title,
                 content: this.formSearch.content,
-                pageStart : (this.pageStart-1)*this.pageSize,
-                pageSize : this.pageSize
+                pageStart: (this.pageStart - 1) * this.pageSize,
+                pageSize: this.pageSize
             };
             queryArticleList(param)
-                .then( (res) => {
+                .then((res) => {
                     let _data = res.data;
-                    if(_data.success){
+                    if (_data.success) {
                         this.tableList = _data.data.list;
                         this.total = _data.data.count;
                     }
-                    
                 })
-                .catch(function(error){
+                .catch(function(error) {
                     console.log(error);
                 });
         },
         // 添加标签
-        addTag(){
+        addTag() {
             this.tagVisible = true;
         },
         // 查看
-        handleView(){
-
+        handleView() {
         },
         // 编辑
-        handleEdit(params){
+        handleEdit(params) {
             this.type = 'edit';
             this.tagVisible = true;
         },
         // 删除
-        handleRemove(){
-
+        handleRemove() {
         },
         // 弹窗点击确定
-        tagOk(name){
+        tagOk(name) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
                     this.$Message.success('提交成功!');
@@ -213,24 +209,22 @@ export default {
             })
         },
         // 弹窗点击取消
-        tagCancel(name){
+        tagCancel(name) {
             const self = this;
             self.tagVisible = false;
-            
-            setTimeout(function(){
+            setTimeout(function() {
                 self.$refs[name].resetFields();
-            },500)
-            
-        },  
-        handleSearch(){
+            }, 500)
+        },
+        handleSearch() {
             this.pageStart = 1;
             this.getInitData();
         },
-        handlePageChange(val){
+        handlePageChange(val) {
             this.pageStart = val;
             this.getInitData();
         },
-        handlePageSizeChange(val){
+        handlePageSizeChange(val) {
             this.pageSize = val;
             this.getInitData();
         }

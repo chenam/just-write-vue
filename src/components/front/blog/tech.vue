@@ -17,19 +17,16 @@
 <script>
 export default {
     name: 'blog',
-    data () {
+    data() {
         return {
-            dataList:[
-            
-            ]
+            dataList: []
         }
     },
-    created(){
-        this.initData();    
+    created() {
+        this.initData();
     },
-    methods : {
-        initData(){
-
+    methods: {
+        initData() {
         }
     }
 }

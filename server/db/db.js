@@ -29,7 +29,9 @@ const ArticleSchema = new Schema({
     modifyDate : {
         type:Date,
         default:Date.now()
-    } 
+    } ,
+    // 修改日期的字符串格式
+    modifyDateStr : String
 },{
     versionKey:false,
     timestamps:{createDate : 'createDate',modifyDate : 'modifyDate'}

@@ -27,6 +27,7 @@ module.exports = {
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
+    useEslint: true,
     proxyTable: {
       // proxy all requests starting with /api to jsonplaceholder
       '/api': {

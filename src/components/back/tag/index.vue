@@ -5,18 +5,17 @@
 </template>
 
 <script>
-import $ from 'jquery';
 export default {
     data () {
         return {
         }
     },
-    created(){
+    created() {
     },
-    methods : {
-        init(){
+    methods: {
+        init() {
         },
-        addArticle(){
+        addArticle() {
         }
     }
 }

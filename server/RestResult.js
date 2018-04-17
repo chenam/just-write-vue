@@ -5,6 +5,7 @@ var RestResult = function(){
     this.errorMsg = "";
     this.success = false; 
     this.msg = ''; 
+    this.contentHTML = '';
 };  
   
   
